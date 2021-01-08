@@ -1,6 +1,10 @@
+
+//Copy of ShoesList
+
 import React, { Component } from 'react'
 import ReactTable from 'react-table'
 import api from '../api'
+import Display from '../components/Display'
 
 import styled from 'styled-components'
 
@@ -20,11 +24,11 @@ const Delete = styled.div`
     cursor: pointer;
 `
 
-class UpdateMovie extends Component {
+class UpdateShoe extends Component {
     updateUser = event => {
         event.preventDefault()
 
-        window.location.href = `/movies/update/${this.props.id}`
+        window.location.href = `/shoes/update/${this.props.id}`
     }
 
     render() {
@@ -32,16 +36,16 @@ class UpdateMovie extends Component {
     }
 }
 
-class DeleteMovie extends Component {
+class DeleteShoe extends Component {
     deleteUser = event => {
         event.preventDefault()
 
         if (
             window.confirm(
-                `Do tou want to delete the movie ${this.props.id} permanently?`,
+                `Do tou want to delete the shoe ${this.props.id} permanently?`,
             )
         ) {
-            api.deleteMovieById(this.props.id)
+            api.deleteShoeById(this.props.id)
             window.location.reload()
         }
     }
@@ -51,11 +55,11 @@ class DeleteMovie extends Component {
     }
 }
 
-class MoviesList extends Component {
+class Page4 extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            movies: [],
+            shoes: [],
             columns: [],
             isLoading: false,
         }
@@ -64,82 +68,89 @@ class MoviesList extends Component {
     componentDidMount = async () => {
         this.setState({ isLoading: true })
 
-        await api.getAllMovies().then(movies => {
+        await api.getAllShoes().then(shoes => {
             this.setState({
-                movies: movies.data.data,
+                shoes: shoes.data.data,
                 isLoading: false,
             })
         })
     }
 
     render() {
-        const { movies, isLoading } = this.state
+       //return('This page is working now') 
+        const { shoes, isLoading } = this.state
+
+        // {
+        //     Header: 'ID',
+        //     accessor: '_id',
+        //     filterable: true,
+        // },
 
         const columns = [
-            {
-                Header: 'ID',
-                accessor: '_id',
-                filterable: true,
-            },
+            
             {
                 Header: 'Name',
                 accessor: 'name',
                 filterable: true,
             },
             {
-                Header: 'Rating',
-                accessor: 'rating',
-                filterable: true,
-            },
-            {
-                Header: 'Time',
-                accessor: 'time',
+                Header: 'Colors',
+                accessor: 'colors',
                 Cell: props => <span>{props.value.join(' / ')}</span>,
             },
             {
-                Header: '',
-                accessor: '',
-                Cell: function(props) {
-                    return (
-                        <span>
-                            <DeleteMovie id={props.original._id} />
-                        </span>
-                    )
-                },
+                Header: 'Image',
+                accessor: 'image',
             },
             {
-                Header: '',
-                accessor: '',
-                Cell: function(props) {
-                    return (
-                        <span>
-                            <UpdateMovie id={props.original._id} />
-                        </span>
-                    )
-                },
+                Header: 'Price',
+                accessor: 'price'
             },
+            // {
+            //     Header: '',
+            //     accessor: '',
+            //     Cell: function(props) {
+            //         return (
+            //             <span>
+            //                 <DeleteShoe id={props.original._id} />
+            //             </span>
+            //         )
+            //     },
+            // },
+            // {
+            //     Header: '',
+            //     accessor: '',
+            //     Cell: function(props) {
+            //         return (
+            //             <span>
+            //                 <UpdateShoe id={props.original._id} />
+            //             </span>
+            //         )
+            //     },
+            // },
         ]
 
         let showTable = true
-        if (!movies.length) {
+        if (!shoes.length) {
             showTable = false
         }
 
         return (
             <Wrapper>
-                {showTable && (
+                {/* {showTable && (
                     <ReactTable
-                        data={movies}
+                        data={shoes}
                         columns={columns}
                         loading={isLoading}
                         defaultPageSize={10}
                         showPageSizeOptions={true}
                         minRows={0}
                     />
-                )}
+                )} */}
+                <Display />
             </Wrapper>
         )
     }
 }
 
-export default MoviesList
+export default Page4

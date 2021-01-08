@@ -1,39 +1,39 @@
-const Movie = require('../models/movie-model')
+const Shoe = require('../models/shoe-model')
 
-createMovie = (req, res) => {
+createShoe = (req, res) => {
     const body = req.body
 
     if (!body) {
         return res.status(400).json({
             success: false,
-            error: 'You must provide a movie',
+            error: 'You must provide a shoe',
         })
     }
 
-    const movie = new Movie(body)
+    const shoe = new Shoe(body)
 
-    if (!movie) {
+    if (!shoe) {
         return res.status(400).json({ success: false, error: err })
     }
 
-    movie
+    shoe
         .save()
         .then(() => {
             return res.status(201).json({
                 success: true,
-                id: movie._id,
-                message: 'Movie created!',
+                id: shoe._id,
+                message: 'Shoe created!',
             })
         })
         .catch(error => {
             return res.status(400).json({
                 error,
-                message: 'Movie not created!',
+                message: 'Shoe not created!',
             })
         })
 }
 
-updateMovie = async (req, res) => {
+updateShoe = async (req, res) => {
     const body = req.body
 
     if (!body) {
@@ -43,78 +43,78 @@ updateMovie = async (req, res) => {
         })
     }
 
-    Movie.findOne({ _id: req.params.id }, (err, movie) => {
+    Shoe.findOne({ _id: req.params.id }, (err, shoe) => {
         if (err) {
             return res.status(404).json({
                 err,
-                message: 'Movie not found!',
+                message: 'Shoe not found!',
             })
         }
-        movie.name = body.name
-        movie.time = body.time
-        movie.rating = body.rating
-        movie
+        shoe.name = body.name
+        shoe.time = body.time
+        shoe.rating = body.rating
+        shoe
             .save()
             .then(() => {
                 return res.status(200).json({
                     success: true,
-                    id: movie._id,
-                    message: 'Movie updated!',
+                    id: shoe._id,
+                    message: 'Shoe updated!',
                 })
             })
             .catch(error => {
                 return res.status(404).json({
                     error,
-                    message: 'Movie not updated!',
+                    message: 'Shoe not updated!',
                 })
             })
     })
 }
 
-deleteMovie = async (req, res) => {
-    await Movie.findOneAndDelete({ _id: req.params.id }, (err, movie) => {
+deleteShoe = async (req, res) => {
+    await Shoe.findOneAndDelete({ _id: req.params.id }, (err, shoe) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
 
-        if (!movie) {
+        if (!shoe) {
             return res
                 .status(404)
-                .json({ success: false, error: `Movie not found` })
+                .json({ success: false, error: `Shoe not found` })
         }
 
-        return res.status(200).json({ success: true, data: movie })
+        return res.status(200).json({ success: true, data: shoe })
     }).catch(err => console.log(err))
 }
 
-getMovieById = async (req, res) => {
-    await Movie.findOne({ _id: req.params.id }, (err, movie) => {
+getShoeById = async (req, res) => {
+    await Shoe.findOne({ _id: req.params.id }, (err, shoe) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
 
-        return res.status(200).json({ success: true, data: movie })
+        return res.status(200).json({ success: true, data: shoe })
     }).catch(err => console.log(err))
 }
 
-getMovies = async (req, res) => {
-    await Movie.find({}, (err, movies) => {
+getShoes = async (req, res) => {
+    await Shoe.find({}, (err, shoes) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
-        if (!movies.length) {
+        if (!shoes.length) {
             return res
                 .status(404)
-                .json({ success: false, error: `Movie not found` })
+                .json({ success: false, error: `Shoe not found` })
         }
-        return res.status(200).json({ success: true, data: movies })
+        return res.status(200).json({ success: true, data: shoes })
     }).catch(err => console.log(err))
 }
 
 module.exports = {
-    createMovie,
-    updateMovie,
-    deleteMovie,
-    getMovies,
-    getMovieById,
+    createShoe,
+    updateShoe,
+    deleteShoe,
+    getShoes,
+    getShoeById,
 }
